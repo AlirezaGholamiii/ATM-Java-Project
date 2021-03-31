@@ -1,9 +1,15 @@
 package bus;
 
+import java.io.Serializable;
 import bus.Account;
 
 public class Customer extends Account {
 	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8310101750330602652L;
 	private String customerNum;
 	private String customerName;
 	private String customerPIN;

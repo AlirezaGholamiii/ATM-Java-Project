@@ -1,8 +1,12 @@
 package bus;
 import java.time.LocalDate;
 
-public class Transaction {
+public class Transaction extends Account {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7248504969072653604L;
 	private String transactionNum;
 	private String description;
 	private LocalDate transactionDate;

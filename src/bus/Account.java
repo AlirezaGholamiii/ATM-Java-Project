@@ -7,11 +7,12 @@ import java.time.LocalDate;
 import bus.Customer;
 
 public class Account implements Serializable{
-	
+
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6791484584527228282L;
+	private static final long serialVersionUID = -1183395108463511269L;
 	private String accountNum;
 	//private String accountPIN;
 	private EnumAccount accountType;
