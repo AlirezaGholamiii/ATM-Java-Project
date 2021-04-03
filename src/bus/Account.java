@@ -141,11 +141,12 @@ public class Account implements Serializable{
 		
 	}
 	
-	public void withdrawl(double amount)
+	public boolean withdrawl(double amount)
 	{
 		if(amount > accountBalance)
 		{
-			return;
+			
+			return false;
 		}
 		else
 		{
@@ -158,9 +159,11 @@ public class Account implements Serializable{
 		//transaction.setTransactionDate();
 		transaction.setTransactionAmount(amount);
 		transaction.setBalance(accountBalance);
-		transaction.setTransactionType(EnumTransaction.Deposit);
+		transaction.setTransactionType(EnumTransaction.Withdrawl);
 		listTransactions[totalTransaction++]  = transaction;
+		
 		}
+	return true;
 	}
 
 

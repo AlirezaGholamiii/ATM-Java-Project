@@ -6,6 +6,7 @@ import data.DataCollection;
 import bus.Customer;
 import bus.Account;
 import bus.EnumAccount;
+import bus.Validator;
 
 
 
@@ -15,6 +16,7 @@ public class main {
 		
 		Scanner scanner = new Scanner(System.in);
 		String inputKey;
+		
 		
 		do {
 			System.out.println("1 - Add a new customer.");
@@ -26,33 +28,55 @@ public class main {
 			System.out.println("7 - Enter to an account for more servises.");
 			System.out.println("8 - Exit");
 			System.out.print("\t Please enter your option: ");
-			
-			
+			String customerNum , customerName, customerPin , customerEmail , accountNum;
+			EnumAccount accountType;
+			double blance;
 			inputKey = scanner.next();
 			switch (inputKey) {
 				case "1": {
 					System.out.print("\t((ADD A NEW CUSTOMER))\n\n");
 					
-					System.out.println("Customer Number: \n");	
-					String customerNum = scanner.next();
 					
-					System.out.println("Customer Name: \n");	
-					String customerName = scanner.next();
-					
-					System.out.println("Customer Pin: \n");	
-					String customerPin = scanner.next();
-					
-					System.out.println("Customer Email: \n");	
-					String customerEmail = scanner.next();
-					  
-					//A customer must have at least a checking account. 
+					//Get customer number with validation
+					do {
+						System.out.println("Customer Number: \n");
+						customerNum = scanner.next();
 						
+					}while(Validator.ValiCustomerNumber(customerNum) == false);
+					
+					
+					//Get customer name with validation
+					do {
+						System.out.println("Customer Name: \n");	
+						customerName = scanner.next();
+					
+					}while(Validator.ValiCustomerName(customerName) == false);
+					
+					//Get Customer Pin with validation
+					do {
+						System.out.println("Customer Pin: \n");	
+						customerPin = scanner.next();
+					
+					}while(Validator.ValiCustomerPin(customerPin) == false);
+					
+					do {
+						System.out.println("Customer Email: \n");	
+						customerEmail = scanner.next();
+					
+					}while(Validator.ValiCustomerEmail(customerEmail) == false);
+					
+					
+					//A customer must have at least a checking account. 
+					
+					//create new customer with parameters
 					Customer newCustomer = null;
 					newCustomer = new Customer(customerNum, customerName, customerPin, customerEmail);
 					
+					//Create new accout type checking
 					Account defaultAccount = null;
 					defaultAccount = new Account(newCustomer.getOwnerID(), newCustomer.getAccountType(), newCustomer.getAccountBalance());
 					
+					//Save new customer and new account to data collection
 					DataCollection.addCustomer(newCustomer);
 					DataCollection.addAccount(defaultAccount);
 					System.out.println("\n\n\n\n\n\n");
@@ -60,10 +84,15 @@ public class main {
 				}
 				case "2": {
 					System.out.print("\t((REMOVE AN EXISTING CUSTOMER))\n\n");
-				
-					System.out.println("Please enter a customer number: \n");
-					String customerNum = scanner.next();
 					
+					//Get a customer number for deleting from data collection
+					do {
+						System.out.println("Please enter a customer number: \n");
+						customerNum = scanner.next();
+						
+					}while(Validator.ValiCustomerNumber(customerNum) == false);
+					
+					//Check if customer exist then remove it from data collection
 					DataCollection.removeCustomer(customerNum);
 					System.out.println("\n\n\n\n\n\n");
 					break;
@@ -71,6 +100,7 @@ public class main {
 				case "3": {
 					System.out.print("\t((ALL THE CUSTOMERS))\n\n");
 					
+					//Open the file, deserialization and show all customers
 					DataCollection.allCustomers();
 					System.out.println("\n\n");
 					break;
@@ -78,61 +108,79 @@ public class main {
 				case "4": {
 					System.out.print("\t((OPEN A NEW ACCOUNT))\n\n");
 					
+					//Get customer number with validation
+					do {
 					System.out.print("Please enter a customer number: \n");
-					String customernum = scanner.next();
-					if(DataCollection.searchCustomers(customernum) == null)
-					{
-						System.out.println("This customer does not exist!");
-						
-					}
-					else
+					customerNum = scanner.next();
+					}while(Validator.ValiCustomerNumber(customerNum) == false);
+					
+					//check the number in data collection if exist then run the request
+					if(DataCollection.searchCustomers(customerNum) != null)
 					{
 						//We can show the customer information here!
+						String temp;
+						//Get Enum type by menu and validation
+						do {
+							System.out.println("Please select the account type: \n");
+							 accountType  = EnumAccount.Undefined;	
+							System.out.println(" \t 1- Checking");
+							System.out.println(" \t 2- Saving");
+							System.out.println(" \t 3- Credit");
+							temp = scanner.next();
+							  switch(temp)
+								{
+								case "1" :
+									accountType = EnumAccount.Checking;
+									break;					
+								case "2":
+									accountType = EnumAccount.Saving;
+									break;
+								case "3":
+									accountType = EnumAccount.Credit;
+									break;
+								default:
+									accountType = EnumAccount.Undefined;
+									break;
+								}
+							 
+							}while(Validator.ValiAccountEnumType(temp) == false);
 						
-						System.out.println("Please select the account type: \n");
-						EnumAccount accountType  = EnumAccount.Undefined;	
-						System.out.println(" \t 1- Checking");
-						System.out.println(" \t 2- Saving");
-						System.out.println(" \t 3- Credit");
-						
-						  switch(scanner.nextInt())
-							{
-							case 1 :
-								accountType = EnumAccount.Checking;
-								break;					
-							case 2:
-								accountType = EnumAccount.Saving;
-								break;
-							case 3:
-								accountType = EnumAccount.Credit;
-								break;
-							default:
-								accountType = EnumAccount.Undefined;
-								break;
-							}
+							//Get balence with validation
+							String tempbalance;
+						do {
+							System.out.println("Please enter account balance: \n");
+							tempbalance = scanner.next();
+						   
+						} while(Validator.ValiAccountBalance(tempbalance) == false);
 						  
-						  
-						  System.out.println("Please enter account balance: \n");
-						  double blance = scanner.nextDouble();
-							
-						  
+						//Create an account with all validated information and save to file
 						  Account newAccount = null;
-						  newAccount = new Account(customernum, accountType, blance);
-						  DataCollection.addAccount(newAccount);
+						  newAccount = new Account(customerNum, accountType, Double.valueOf(tempbalance));
+						  DataCollection.addAccount(newAccount);						
+						
 					}
-					
+				
 					System.out.println("\n\n");
 					break;
 				}
 				case "5": {
 					System.out.print("\t((REMOVE AN ACCOUNT))\n\n");
+					
+					//Get account number to remove it from file
+					do {
 					System.out.print("Enter the account number: \n");
-					String accountNumber = scanner.next();
-					DataCollection.removeAccount(accountNumber);
+					accountNum = scanner.next();
+					
+					}while(Validator.ValiAccountNumber(accountNum) == false);
+					
+					//Search and if exist then remove it
+					DataCollection.removeAccount(accountNum);
 					break;
 				}
 				case "6": {
 					System.out.print("\t((ALL THE ACCOUNTS))\n\n");
+					
+					//Provide all data from serializable file
 					DataCollection.allAccounts();
 					System.out.println("\n\n");
 					break;

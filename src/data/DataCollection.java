@@ -32,7 +32,8 @@ public class DataCollection {
 				 FileHandeler.writeToFileAccount(filelistOfAccount);
 				 System.out.println("Account with the Number of " + key + " removed!");
 			 }
-		 }	
+		 }
+    	 System.out.println("This Account Does Not Exist!");
 	 }	 
 	
      //dsiplay all accounts
@@ -40,12 +41,12 @@ public class DataCollection {
 	 {
 		 filelistOfAccount = FileHandeler.readFromFileAccount();
 		 
-		// for(Account element : filelistOfAccount)
-		 //{
-			  System.out.println(filelistOfAccount);
+		 for(Account element : filelistOfAccount)
+		 {
+			  System.out.println(element);
 			 
-			 
-		 //}
+		 }	 
+		 
 		
 	 } 	 
 	  	 
@@ -102,10 +103,18 @@ public class DataCollection {
 				    	 
 				 if(((Account) element).getAccountNum().equals(key))
 				 {
-					 
-					 	element.withdrawl(amount);	
-					 	FileHandeler.writeToFileAccount(filelistOfAccount);
-					 	System.out.println(amount + "$ Amount withdrawn from account.");
+					 if(element.withdrawl(amount)== false)
+					 {
+						 System.out.println("Not enogh money!");
+					 }
+					 else
+					 {
+						 element.withdrawl(amount);	
+						 FileHandeler.writeToFileAccount(filelistOfAccount);
+						 System.out.println(amount + "$ was withdrawn.");
+					 }
+					 	
+					 	
 				 }
 			 }		 
 	   	   
@@ -129,18 +138,18 @@ public class DataCollection {
 	 }
 	
 
-	 //////////////////////////////////////////////////// customer
+	 //////////////////////////////////////////////////// customer ////////////////////////////////////////////
 	 private static  ArrayList<Customer>  filelistOfCustomer = new  ArrayList<Customer>();
 	 
 	 //public static operations
-	//Add an account	 
+	//Add an Customer	 
      public static void addCustomer(Customer object)throws IOException, ClassNotFoundException
 	 {
     	 filelistOfCustomer.add(object);
     	 FileHandeler.writeToFileCustomer(filelistOfCustomer);
 	 }	 
 	 
-     //Remove an account
+     //Remove a customer
      public static void removeCustomer(String key)throws IOException, ClassNotFoundException
 	 {
     	 filelistOfCustomer = FileHandeler.readFromFileCustomer();
@@ -166,6 +175,10 @@ public class DataCollection {
 				 filelistOfCustomer.remove(element);
 				 FileHandeler.writeToFileCustomer(filelistOfCustomer);
 				 System.out.println("Account with the Number of " + key + " removed!");
+			 }
+			 else 
+			 {
+				 System.out.println("This Customer Does Not Exist!");
 			 }
 		 }	
 	 }	 
@@ -195,7 +208,9 @@ public class DataCollection {
 				 {
 					 return element ;				 
 				 }
-			 }		 
+ 
+			 }
+	   System.out.println("This customer does not exist!");
 	   return null;	   
 	 }
 	 
