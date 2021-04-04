@@ -1,7 +1,9 @@
 package data;
 import bus.Account;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import bus.Customer;
 public class DataCollection {
@@ -20,39 +22,60 @@ public class DataCollection {
 	 }	 
 	 
      //Remove an account
-     public static void removeAccount(String key)throws IOException, ClassNotFoundException
+  
+	public static void removeAccount(String key)throws ClassNotFoundException, IOException
 	 {
-		 	
-    	 for( Account element : filelistOfAccount)
-		 {
-			  
-			 if(((Account) element).getAccountNum().equals(key))
+		
+    	 Account accountForRemove = new Account();
+    	 try {
+	 	
+	    	 for( Account element : filelistOfAccount)
 			 {
-				 filelistOfAccount.remove(element);
-				 FileHandeler.writeToFileAccount(filelistOfAccount);
-				 System.out.println("Account with the Number of " + key + " removed!");
+	    		
+				 if(((Account) element).getAccountNum().equals(key))
+				 {
+					 accountForRemove = element;
+					 filelistOfAccount.remove(accountForRemove);
+					 System.out.println("Account with the Number of " + key + " removed!");
+					
+				 }
+
 			 }
-		 }
-    	 System.out.println("This Account Does Not Exist!");
+	    	 
+	    	 FileHandeler.writeToFileAccount(filelistOfAccount);	 
+    	 }
+    	 catch(IOException e)
+    	 {
+    		 System.out.println("File not found! :(\n\n");
+    	
+    	 }
+    	 
+		
 	 }	 
 	
      //dsiplay all accounts
-	 public static void allAccounts()throws IOException, ClassNotFoundException	 
+	 public static void allAccounts()throws ClassNotFoundException 	 
 	 {
-		 filelistOfAccount = FileHandeler.readFromFileAccount();
-		 
-		 for(Account element : filelistOfAccount)
+		 try { 
+				 filelistOfAccount = FileHandeler.readFromFileAccount();
+				 
+				 for(Account element : filelistOfAccount)
+				 {
+					  System.out.println(element); 
+				 }
+		 }
+		 catch(IOException e)
 		 {
-			  System.out.println(element);
-			 
-		 }	 
+			System.out.println("File not found! :(\n\n");
+		 }
 		 
 		
 	 } 	 
 	  	 
 	 //search for an Account by number	 
-	 public static Account searchAccount(String key)throws IOException, ClassNotFoundException
+	 public static Account searchAccount(String key)throws ClassNotFoundException
 	 {
+	   try {
 		 filelistOfAccount = FileHandeler.readFromFileAccount();
 		 
 			 for( Account element : filelistOfAccount)
@@ -62,8 +85,15 @@ public class DataCollection {
 				 {
 					 return element ;				 
 				 }
-			 }		 
-	   return null;	   
+			 }
+			 
+			 return null;
+		 }
+		 catch(IOException e)
+		 {
+			 System.out.println("File not found! :(");
+			 return null;
+		 }
 	 }
 	 
 	 public static  ArrayList<Account>   getAccountList()
@@ -87,7 +117,6 @@ public class DataCollection {
 					 
 					 	element.deposit(amount);
 					 	FileHandeler.writeToFileAccount(filelistOfAccount);
-					 	System.out.println(amount + "$ Amount added to account.");
 				 }
 			 }		 
 	   	   
@@ -103,21 +132,21 @@ public class DataCollection {
 				    	 
 				 if(((Account) element).getAccountNum().equals(key))
 				 {
-					 if(element.withdrawl(amount)== false)
-					 {
-						 System.out.println("Not enogh money!");
+					 if(amount >= element.getAccountBalance()) {
+							
+							System.out.println("Not enought money !");;
 					 }
 					 else
 					 {
 						 element.withdrawl(amount);	
 						 FileHandeler.writeToFileAccount(filelistOfAccount);
 						 System.out.println(amount + "$ was withdrawn.");
-					 }
-					 	
-					 	
+					 }	
+						 
+						 
 				 }
-			 }		 
-	   	   
+			 }
+			 
 	 }
 	 
 	 //search for an Account and show details	 
@@ -150,68 +179,104 @@ public class DataCollection {
 	 }	 
 	 
      //Remove a customer
-     public static void removeCustomer(String key)throws IOException, ClassNotFoundException
+     public static void removeCustomer(String key)throws ClassNotFoundException
 	 {
-    	 filelistOfCustomer = FileHandeler.readFromFileCustomer();
-    	 
-    	 for( Customer element : filelistOfCustomer)
-		 {
-			  
-			 if(((Customer) element).getCustomerNum().equals(key))
+    	 try {
+	    	 filelistOfCustomer = FileHandeler.readFromFileCustomer();
+	    	 
+	    	 for( Customer element : filelistOfCustomer)
 			 {
-				 //search for the all accounts of this costumer and remove all of them
-				 filelistOfAccount = FileHandeler.readFromFileAccount();
-				 for(Account allAccount : filelistOfAccount)
+				  
+				 if(((Customer) element).getCustomerNum().equals(key))
 				 {
-					 if(((Account) allAccount).getOwnerID().equals(key))
+					 //search for the all accounts of this costumer and remove all of them
+					 filelistOfAccount = FileHandeler.readFromFileAccount();
+					 for(Account allAccount : filelistOfAccount)
 					 {
-						 filelistOfAccount.remove(allAccount);
-						 
+						 if(((Account) allAccount).getOwnerID().equals(key))
+						 {
+							 filelistOfAccount.remove(allAccount);
+							 
+						 }
 					 }
+					 FileHandeler.writeToFileAccount(filelistOfAccount);
+					 
+					 //After removing all accounts relate to this customer then remove customer.
+					 filelistOfCustomer.remove(element);
+					 FileHandeler.writeToFileCustomer(filelistOfCustomer);
+					 System.out.println("Account with the Number of " + key + " removed!");
 				 }
-				 FileHandeler.writeToFileAccount(filelistOfAccount);
-				 
-				 //After removing all accounts relate to this customer then remove customer.
-				 filelistOfCustomer.remove(element);
-				 FileHandeler.writeToFileCustomer(filelistOfCustomer);
-				 System.out.println("Account with the Number of " + key + " removed!");
+				 else 
+				 {
+					 System.out.println("This Customer Does Not Exist!");
+				 }
 			 }
-			 else 
-			 {
-				 System.out.println("This Customer Does Not Exist!");
-			 }
-		 }	
+    	 }
+    	 catch(IOException e)
+    	 {
+    		 System.out.println("File not found! :(\n\n");
+    	 }
 	 }	 
 	
      //dsiplay all customers
-	 public static void allCustomers()throws IOException, ClassNotFoundException	 
+	 public static void allCustomers()throws  ClassNotFoundException	 
 	 {
-			 filelistOfCustomer = FileHandeler.readFromFileCustomer();
-			 for(Customer element : filelistOfCustomer)
-			 {
-				 System.out.println(element);
-				 
-			 } 
+		 try {
+				 filelistOfCustomer = FileHandeler.readFromFileCustomer();
+				 for(Customer element : filelistOfCustomer)
+				 {
+					 System.out.println(element);
+					 
+				 }
+		 }
+		 catch(IOException e)
+		 {
+			 System.out.println("File not found! :(\n\n");
+		 }
 		 
 		
 	 } 	 
 	  	 
-	 //search for an Account by number	 
-	 public static Customer searchCustomers(String key)throws IOException, ClassNotFoundException
+	 //search for an Customer by number	 
+	 public static Customer searchCustomers(String key)throws  ClassNotFoundException
 	 {
-		 filelistOfCustomer = FileHandeler.readFromFileCustomer();
-		 
-			 for( Customer element : filelistOfCustomer)
-			 {
-				    	 
-				 if(((Customer) element).getCustomerNum().equals(key))
+		 try {
+			 filelistOfCustomer = FileHandeler.readFromFileCustomer();
+			 
+				 for( Customer element : filelistOfCustomer)
 				 {
-					 return element ;				 
+					    	 
+					 if(((Customer) element).getCustomerNum().equals(key))
+					 {
+						 return element ;				 
+					 }
+	 
 				 }
- 
-			 }
-	   System.out.println("This customer does not exist!");
-	   return null;	   
+				 return null;
+		 }
+		 catch(IOException e)
+		 {
+			 System.out.println("File not found! :(\n\n");
+			 return null;
+		 }
+	 }
+
+	 //search for a customer to make sure does not exist before adding again into the file	 
+	 public static boolean searchCustomersExist(String key)throws  ClassNotFoundException, IOException
+	 {
+			 filelistOfCustomer = FileHandeler.readFromFileCustomer();
+			 
+				 for( Customer element : filelistOfCustomer)
+				 {
+					    	 
+					 if(((Customer) element).getCustomerNum().equals(key))
+					 {
+						 return true ;				 
+					 }
+	 
+				 }
+				 return false; 
+
 	 }
 	 
 	 public static  ArrayList<Customer>   getCustomerList()

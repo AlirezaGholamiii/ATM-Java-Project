@@ -6,7 +6,7 @@ public class Validator {
  
 	public static boolean ValiCustomerNumber(String customernum) {
 		
-		String addressPattern = "[0-9]{7}";
+		String addressPattern = "[0-9]{7}|[!]{1}";
 		boolean b3 = Pattern.matches(addressPattern, customernum); 
 		
 		if(b3 == true)
@@ -100,6 +100,35 @@ public class Validator {
 			return true;
 		}
 		System.out.println("Please Enter A Valid Account Number With 5 to 10 Digit!\n");
+		return false;
+	}
+	
+	public static boolean ValiSwitchCase(String option) {
+		
+		String addressPattern = "[1-3]{1}";
+		boolean b3 = Pattern.matches(addressPattern, option); 
+		
+		
+		if(b3 == true)
+		{
+			return true;
+		}
+		System.out.println("Please Enter A Correct Option Between 1 to 3!\n");
+		return false;
+	}
+	
+	public static boolean ValiAccountWithdraw(String balance) {
+		
+		String addressPattern = "^\\d+(,\\d{3})*(\\.\\d{1,2})?$";
+		
+		boolean b3 = Pattern.matches(addressPattern, balance); 
+		
+		
+		if(b3 == true)
+		{
+			return true;
+		}
+		System.out.println("Please Enter A Valid Number!\nEX: 120.70\n");
 		return false;
 	}
 

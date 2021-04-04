@@ -141,18 +141,12 @@ public class Account implements Serializable{
 		
 	}
 	
-	public boolean withdrawl(double amount)
+	public void withdrawl(double amount)
 	{
-		if(amount > accountBalance)
-		{
-			
-			return false;
-		}
-		else
-		{
-			
+		
 	
 		accountBalance -= amount;
+		
 		Transaction transaction = new Transaction();
 		Calendar cal = Calendar.getInstance();
 		Date date = cal.getTime();
@@ -162,8 +156,7 @@ public class Account implements Serializable{
 		transaction.setTransactionType(EnumTransaction.Withdrawl);
 		listTransactions[totalTransaction++]  = transaction;
 		
-		}
-	return true;
+	
 	}
 
 

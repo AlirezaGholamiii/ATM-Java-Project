@@ -1,8 +1,10 @@
 package client;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 import data.DataCollection;
+import data.FileHandeler;
 import bus.Customer;
 import bus.Account;
 import bus.EnumAccount;
@@ -18,6 +20,10 @@ public class main {
 		String inputKey;
 		
 		
+		File file = new File("src//data// customers.ser");
+		boolean fileExists;
+
+		
 		do {
 			System.out.println("1 - Add a new customer.");
 			System.out.println("2 - Remove a customer.");
@@ -28,23 +34,23 @@ public class main {
 			System.out.println("7 - Enter to an account for more servises.");
 			System.out.println("8 - Exit");
 			System.out.print("\t Please enter your option: ");
-			String customerNum , customerName, customerPin , customerEmail , accountNum;
+			
+			//Declaring variable to store data
+			String customerNum  , customerName, customerPin , customerEmail , accountNum , swichInput, balance, depositAamount,withdrawAmount;
 			EnumAccount accountType;
-			double blance;
+			
 			inputKey = scanner.next();
 			switch (inputKey) {
 				case "1": {
 					System.out.print("\t((ADD A NEW CUSTOMER))\n\n");
-					
-					
+					fileExists = file.exists();
+
 					//Get customer number with validation
 					do {
 						System.out.println("Customer Number: \n");
-						customerNum = scanner.next();
-						
+						customerNum = scanner.next();	
 					}while(Validator.ValiCustomerNumber(customerNum) == false);
-					
-					
+
 					//Get customer name with validation
 					do {
 						System.out.println("Customer Name: \n");	
@@ -66,19 +72,55 @@ public class main {
 					}while(Validator.ValiCustomerEmail(customerEmail) == false);
 					
 					
-					//A customer must have at least a checking account. 
+					 
 					
-					//create new customer with parameters
-					Customer newCustomer = null;
-					newCustomer = new Customer(customerNum, customerName, customerPin, customerEmail);
+					//Check if the file exists then check all customer number to avoid saving a repeated number
+					if(fileExists == true)
+					{
+							//check for all customer numbers
+							if(DataCollection.searchCustomersExist(customerNum) == true)
+							{
+								System.out.println("The Account Number " +customerNum+ " already Exists!");
+							
+							}
+							else
+							{
+								//create new customer with parameters
+								Customer newCustomer = null;
+								newCustomer = new Customer(customerNum, customerName, customerPin, customerEmail);
+								
+								//A customer must have at least a checking account.
+								//Create new accout type checking
+								Account defaultAccount = null;
+								defaultAccount = new Account(newCustomer.getOwnerID(), newCustomer.getAccountType(), newCustomer.getAccountBalance());
+								
+								//Save new customer and new account to data collection
+								DataCollection.addCustomer(newCustomer);
+								DataCollection.addAccount(defaultAccount);
+								System.out.println("Customer Number "+ customerNum +" Successfully Added To File.");
+							}
+
+					}
+					else
+					{
+						
+						Customer newCustomer = null;
+						newCustomer = new Customer(customerNum, customerName, customerPin, customerEmail);
+						
+						//Create new accout type checking
+						Account defaultAccount = null;
+						defaultAccount = new Account(newCustomer.getOwnerID(), newCustomer.getAccountType(), newCustomer.getAccountBalance());
+						
+						//Save new customer and new account to data collection
+						DataCollection.addCustomer(newCustomer);
+						DataCollection.addAccount(defaultAccount);
+						System.out.println("Customer Number "+ customerNum +" Successfully Added To File.");
+						
+					}
 					
-					//Create new accout type checking
-					Account defaultAccount = null;
-					defaultAccount = new Account(newCustomer.getOwnerID(), newCustomer.getAccountType(), newCustomer.getAccountBalance());
+
 					
-					//Save new customer and new account to data collection
-					DataCollection.addCustomer(newCustomer);
-					DataCollection.addAccount(defaultAccount);
+
 					System.out.println("\n\n\n\n\n\n");
 					break;
 				}
@@ -118,7 +160,7 @@ public class main {
 					if(DataCollection.searchCustomers(customerNum) != null)
 					{
 						//We can show the customer information here!
-						String temp;
+						
 						//Get Enum type by menu and validation
 						do {
 							System.out.println("Please select the account type: \n");
@@ -126,8 +168,8 @@ public class main {
 							System.out.println(" \t 1- Checking");
 							System.out.println(" \t 2- Saving");
 							System.out.println(" \t 3- Credit");
-							temp = scanner.next();
-							  switch(temp)
+							swichInput = scanner.next();
+							  switch(swichInput)
 								{
 								case "1" :
 									accountType = EnumAccount.Checking;
@@ -143,21 +185,25 @@ public class main {
 									break;
 								}
 							 
-							}while(Validator.ValiAccountEnumType(temp) == false);
+							}while(Validator.ValiAccountEnumType(swichInput) == false);
 						
 							//Get balence with validation
-							String tempbalance;
+							
 						do {
 							System.out.println("Please enter account balance: \n");
-							tempbalance = scanner.next();
+							balance = scanner.next();
 						   
-						} while(Validator.ValiAccountBalance(tempbalance) == false);
+						} while(Validator.ValiAccountBalance(balance) == false);
 						  
 						//Create an account with all validated information and save to file
 						  Account newAccount = null;
-						  newAccount = new Account(customerNum, accountType, Double.valueOf(tempbalance));
+						  newAccount = new Account(customerNum, accountType, Double.valueOf(balance));
 						  DataCollection.addAccount(newAccount);						
 						
+					}
+					else
+					{
+						System.out.println("This customer does not exist!");
 					}
 				
 					System.out.println("\n\n");
@@ -188,41 +234,66 @@ public class main {
 				case "7": {
 					System.out.print("\t((MORE SERVISES))\n\n");
 					
+					//Get the account number for entering to account for more services
+					//With Validation
+					do {
 					System.out.println("Please enter your account number: \n");
-					String accountNumber = scanner.next();
+					accountNum = scanner.next();
+					}while(Validator.ValiAccountNumber(accountNum) == false);
 					
-					if(DataCollection.searchAccount(accountNumber) == null)
+					//Check if account exist or not
+					if(DataCollection.searchAccount(accountNum) == null)
 					{
 						System.out.println("This account does not exist!");
-						
 					}
 					else
 					{
 						System.out.println("\t((WELCOME))\n\n");
-						System.out.println("Please select your servise: \n");
-						System.out.println(" \t 1- Deposit");
-						System.out.println(" \t 2- Withdraw");
-						System.out.println(" \t 3- Account Information");
-						switch(scanner.nextInt())
-						{
-						case 1 :
-							System.out.println("\t((DEPOSIT))\n\n");
-							System.out.println("Please enter the amount: \n");
-							double depositAamount = scanner.nextDouble();
-								DataCollection.depositAccount(accountNumber, depositAamount);
-							break;					
-						case 2:
-							System.out.println("\t((WITHDRAW))\n\n");
-							System.out.println("Please enter the amount: \n");
-							double withdrawAmount = scanner.nextDouble();
-								DataCollection.withdrawAccount(accountNumber, withdrawAmount);
-							break;
-						case 3:
-								DataCollection.searchAccountInfo(accountNumber);
-							break;
-						default:
-							System.out.println("Your option is not valid.");
-						}
+						
+						//Validating the input for Switch case
+						do {
+							System.out.println("Please select your servise: \n");
+							System.out.println(" \t 1- Deposit");
+							System.out.println(" \t 2- Withdraw");
+							System.out.println(" \t 3- Account Information");
+							swichInput = scanner.next();
+							
+							switch(swichInput)
+							{
+							case "1" :
+								System.out.println("\t((DEPOSIT))\n\n");
+								
+								//Get the amount for deposit with validation
+								do {
+								System.out.println("Please enter the amount: \n");
+								depositAamount = scanner.next();
+								
+								}while(Validator.ValiAccountBalance(depositAamount) == false);
+								
+								//Save deposit to file
+									DataCollection.depositAccount(accountNum, Double.valueOf(depositAamount));
+								break;					
+							case "2":
+								System.out.println("\t((WITHDRAW))\n\n");
+							
+								//Get the amount for withdraw with validation
+								do {
+								System.out.println("Please enter the amount: \n");
+								 withdrawAmount = scanner.next();
+						
+								}while(Validator.ValiAccountWithdraw(withdrawAmount) == false);
+								
+								//save withdraw to file
+									DataCollection.withdrawAccount(accountNum, Double.valueOf(withdrawAmount));
+								break;
+							case "3":
+									//Read data from the file
+									DataCollection.searchAccountInfo(accountNum);
+								break;
+							default:
+								System.out.println("Your option is not valid.");
+							}
+						}while(Validator.ValiSwitchCase(swichInput) == false);
 					}
 					
 					

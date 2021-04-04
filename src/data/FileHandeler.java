@@ -50,6 +50,7 @@ public class FileHandeler {
 	//creating a new path for Customer file
 	private static String filePathCustomer = "src//data// customers.ser" ;
 	
+
 	//creating a method for writing to Customer file
 	public static void writeToFileCustomer(ArrayList<Customer> list) throws IOException
 	{
