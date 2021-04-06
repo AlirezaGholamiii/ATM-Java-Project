@@ -183,34 +183,44 @@ public class DataCollection {
 	 {
     	 try {
 	    	 filelistOfCustomer = FileHandeler.readFromFileCustomer();
+	    	 filelistOfAccount = FileHandeler.readFromFileAccount();
+	    	 
+	    	 
+		    	//search for the all accounts of this costumer and remove all of them
+			 
+				 for(Account allAccount : filelistOfAccount)
+				 {
+					 if(((Account) allAccount).getOwnerID().equals(key))
+					 {
+						 filelistOfAccount.remove(allAccount);
+						 System.out.println("Account with the Number of " + allAccount.getAccountNum() + " removed!");
+					 }
+				 }
+	    	 
+	    	 
+	    	 
 	    	 
 	    	 for( Customer element : filelistOfCustomer)
 			 {
 				  
 				 if(((Customer) element).getCustomerNum().equals(key))
 				 {
-					 //search for the all accounts of this costumer and remove all of them
-					 filelistOfAccount = FileHandeler.readFromFileAccount();
-					 for(Account allAccount : filelistOfAccount)
-					 {
-						 if(((Account) allAccount).getOwnerID().equals(key))
-						 {
-							 filelistOfAccount.remove(allAccount);
-							 
-						 }
-					 }
-					 FileHandeler.writeToFileAccount(filelistOfAccount);
+					 
 					 
 					 //After removing all accounts relate to this customer then remove customer.
 					 filelistOfCustomer.remove(element);
-					 FileHandeler.writeToFileCustomer(filelistOfCustomer);
-					 System.out.println("Account with the Number of " + key + " removed!");
+					 System.out.println("Customer Number " + key + " removed!");
 				 }
-				 else 
-				 {
-					 System.out.println("This Customer Does Not Exist!");
-				 }
+				 
 			 }
+	    	 
+	    	 
+	    	 
+
+			 
+			 
+	    	 FileHandeler.writeToFileAccount(filelistOfAccount);
+	    	 FileHandeler.writeToFileCustomer(filelistOfCustomer);
     	 }
     	 catch(IOException e)
     	 {
