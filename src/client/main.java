@@ -7,6 +7,7 @@ import data.DataCollection;
 import data.FileHandeler;
 import bus.Customer;
 import bus.Account;
+import bus.CheckingAcc;
 import bus.EnumAccount;
 import bus.Validator;
 
@@ -194,11 +195,23 @@ public class main {
 							balance = scanner.next();
 						   
 						} while(Validator.ValiAccountBalance(balance) == false);
+						
+						if(swichInput == "1")
+						{
+							//Create an account with all validated information and save to file
+							CheckingAcc newCheckingAccount = null;
+							newCheckingAccount = new CheckingAcc(customerNum, accountType, Double.valueOf(balance));
+							  DataCollection.addCheckingAcc(newCheckingAccount);
+						}
+						else
+						{
+							//Create an account with all validated information and save to file
+							  Account newAccount = null;
+							  newAccount = new Account(customerNum, accountType, Double.valueOf(balance));
+							  DataCollection.addAccount(newAccount);
+						}
 						  
-						//Create an account with all validated information and save to file
-						  Account newAccount = null;
-						  newAccount = new Account(customerNum, accountType, Double.valueOf(balance));
-						  DataCollection.addAccount(newAccount);						
+						
 						
 					}
 					else

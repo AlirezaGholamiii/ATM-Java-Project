@@ -1,5 +1,6 @@
 package data;
 import bus.Account;
+import bus.CheckingAcc;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +11,7 @@ public class DataCollection {
 	
 	//private static data
 	 private static  ArrayList<Account>  filelistOfAccount = new  ArrayList<Account>();
+	 private static  ArrayList<CheckingAcc>  filelistOfCheckingAcc = new  ArrayList<CheckingAcc>();
 	 
 	 
 	 
@@ -20,6 +22,13 @@ public class DataCollection {
     	 filelistOfAccount.add(object);
     	 FileHandeler.writeToFileAccount(filelistOfAccount);
 	 }	 
+     
+ 	//Add an checking account	 
+     public static void addCheckingAcc(CheckingAcc object) throws IOException, ClassNotFoundException
+	 {
+    	 filelistOfCheckingAcc.add(object);
+    	 FileHandeler.writeToFileCheckingAcc(filelistOfCheckingAcc);
+	 }
 	 
      //Remove an account
   
@@ -49,7 +58,7 @@ public class DataCollection {
     		 System.out.println("File not found! :(\n\n");
     	
     	 }
-    	 
+    	 FileHandeler.writeToFileAccount(filelistOfAccount);
 		
 	 }	 
 	
@@ -60,6 +69,13 @@ public class DataCollection {
 				 filelistOfAccount = FileHandeler.readFromFileAccount();
 				 
 				 for(Account element : filelistOfAccount)
+				 {
+					  System.out.println(element); 
+				 }
+				 
+				 filelistOfCheckingAcc = FileHandeler.readFromFileCheckingAcc();
+				 
+				 for(CheckingAcc element : filelistOfCheckingAcc)
 				 {
 					  System.out.println(element); 
 				 }
@@ -183,45 +199,22 @@ public class DataCollection {
 	 {
     	 try {
 	    	 filelistOfCustomer = FileHandeler.readFromFileCustomer();
-	    	 filelistOfAccount = FileHandeler.readFromFileAccount();
-	    	 
-	    	 
-		    	//search for the all accounts of this costumer and remove all of them
-			 
-				 for(Account allAccount : filelistOfAccount)
-				 {
-					 if(((Account) allAccount).getOwnerID().equals(key))
-					 {
-						 filelistOfAccount.remove(allAccount);
-						 System.out.println("Account with the Number of " + allAccount.getAccountNum() + " removed!");
-					 }
-				 }
-	    	 
-	    	 
-	    	 
-	    	 
-	    	 for( Customer element : filelistOfCustomer)
+
+    		 for( Customer element : filelistOfCustomer)
 			 {
 				  
 				 if(((Customer) element).getCustomerNum().equals(key))
 				 {
 					 
 					 
-					 //After removing all accounts relate to this customer then remove customer.
+					 // remove customer.
 					 filelistOfCustomer.remove(element);
 					 System.out.println("Customer Number " + key + " removed!");
-				 }
-				 
+				 } 
 			 }
-	    	 
-	    	 
-	    	 
-
-			 
-			 
-	    	 FileHandeler.writeToFileAccount(filelistOfAccount);
-	    	 FileHandeler.writeToFileCustomer(filelistOfCustomer);
-    	 }
+    		 //save to file
+    		 FileHandeler.writeToFileCustomer(filelistOfCustomer);
+     	 }
     	 catch(IOException e)
     	 {
     		 System.out.println("File not found! :(\n\n");
