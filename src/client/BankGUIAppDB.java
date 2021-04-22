@@ -39,6 +39,7 @@ public class BankGUIAppDB {
 				try {
 					BankGUIAppDB window = new BankGUIAppDB();
 					window.frmBankApplication.setVisible(true);
+					window.frmBankApplication.setLocationRelativeTo(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -51,6 +52,7 @@ public class BankGUIAppDB {
 	 */
 	public BankGUIAppDB() {
 		initialize();
+	
 	}
 
 	/**
@@ -72,7 +74,8 @@ public class BankGUIAppDB {
 		JButton btnAdd = new JButton("Add Customer");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			
+				AddCustomerGUI addmenu = new AddCustomerGUI();
+				addmenu.setVisible(true);
 			}
 		});
 		btnAdd.setBounds(266, 381, 85, 21);
@@ -142,8 +145,7 @@ public class BankGUIAppDB {
 		JButton btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
+				frmBankApplication.setVisible(false);
 			}
 		});
 		btnExit.setFont(new Font("Tahoma", Font.PLAIN, 12));
