@@ -1,7 +1,10 @@
 package bus;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import bus.Account;
+import data.CustomerDB;
+
 
 public class Customer extends Account {
 	
@@ -67,6 +70,12 @@ public class Customer extends Account {
 	public String toString() {
 		return "Customer [Customer number: " + customerNum + ", Full name:" + customerName + ", PIN:"
 				+ customerPIN + ", Email:" + customerEmail + "]";
+	}
+	
+	//public static database operations	
+	public static int add(Customer aCustomer) throws SQLException
+	{
+		return CustomerDB.insert(aCustomer);			
 	}
 
 }
