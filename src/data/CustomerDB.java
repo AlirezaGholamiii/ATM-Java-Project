@@ -1,5 +1,7 @@
 package data;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import bus.Customer;
@@ -22,6 +24,46 @@ public class CustomerDB {
 		request = "insert into customers  values (' "
 				+ record.getAccountNum() + "', '" + record.getCustomerName() 
 				+ "' , '" + record.getCustomerPIN() + "' , '" + record.getCustomerEmail() + "')";
+		
+        success = currentStatement.executeUpdate(request);		
+		
+		
+		return success;
+		
+	}
+	
+	public static ResultSet display() throws SQLException
+	{
+		
+		Connection currentConnection = null; 
+		String request;
+		
+		currentConnection = ConnectionDB.getConnection();
+		
+		request = "SELECT * FROM customers";
+		
+		PreparedStatement pst = currentConnection.prepareStatement(request);
+		
+		ResultSet rs = pst.executeQuery();
+		
+		
+		return rs;
+		
+	}
+	
+	public static int remove(String id) throws SQLException
+	{
+		int success = -1;
+		
+		Connection currentConnection = null; 
+		Statement currentStatement = null; 
+		String request;
+		
+		currentConnection = ConnectionDB.getConnection();
+		
+		currentStatement = currentConnection.createStatement() ;
+		
+		request = "delete from customers where NUM =" + id;
 		
         success = currentStatement.executeUpdate(request);		
 		

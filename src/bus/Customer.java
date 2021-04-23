@@ -77,5 +77,9 @@ public class Customer extends Account {
 	{
 		return CustomerDB.insert(aCustomer);			
 	}
+	public static int delete(String customerID) throws SQLException
+	{
+		return CustomerDB.remove(customerID);			
+	}
 
 }

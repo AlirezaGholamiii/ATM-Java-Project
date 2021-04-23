@@ -29,6 +29,7 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
 
 public class AddCustomerGUI extends JDialog {
 
@@ -56,6 +57,8 @@ public class AddCustomerGUI extends JDialog {
 	 * Create the dialog.
 	 */
 	public AddCustomerGUI() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\kasra\\eclipse-workspace\\W2021\\BankFortisApplication\\icon\\business-and-finance-glyph-13-512.png"));
+		setResizable(false);
 		setTitle("Add New Customer");
 		setBounds(100, 100, 441, 259);
 		getContentPane().setLayout(new BorderLayout());
@@ -122,7 +125,7 @@ public class AddCustomerGUI extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
-						String num, name, pin, email, msg = null;
+						String num, name, pin, email;
 						
 						num = txtNum.getText();
 						name = txtName.getText().trim();
@@ -131,32 +134,30 @@ public class AddCustomerGUI extends JDialog {
 						
 						if(num.isEmpty() || name.isEmpty() || pin.isEmpty() || email.isEmpty())
 						{
-							JOptionPane.showMessageDialog(null, "Please Enter A Valid Input For Each Feild!");
+							JOptionPane.showMessageDialog(null, "Please Enter A Valid Input For Each Feild!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
 						}
 						else
 						{
+							StringBuilder warnning = new StringBuilder();
 							
-							if(ValidatorGUI.ValiCustomerNumber(num)== false){msg = "1";}
-							if(ValidatorGUI.ValiCustomerName(name)== false){msg = "2";}
-							if(ValidatorGUI.ValiCustomerPin(pin)== false){msg = "3";}
-							if(ValidatorGUI.ValiCustomerEmail(email)== false){msg = "4";}
+							if(ValidatorGUI.ValiCustomerNumber(num)== false)
+							{warnning.append("Please Enter A Valid Number With 7 Digit!\n");}
 							
-							if( msg == "1")
+							if(ValidatorGUI.ValiCustomerName(name)== false)
+							{warnning.append("Please Enter A Valid Name With 2 to 10 Character!\n");}
+							
+							if(ValidatorGUI.ValiCustomerPin(pin)== false)
+							{warnning.append("Please Enter A Valid Pin With 4 Digit!\n");}
+							
+							if(ValidatorGUI.ValiCustomerEmail(email)== false)
+							{warnning.append("Please Enter A Valid Email Address!\n");}
+							
+						
+							if(warnning.length() > 0)
 							{
-								JOptionPane.showMessageDialog(null, "Please Enter A Valid Number With 7 Digit!");
-								return;
-							}
-							else if(msg == "2")
-							{
-								JOptionPane.showMessageDialog(null, "Please Enter A Valid Name With 2 to 10 Character!");
-							}
-							else if(msg == "3")
-							{
-								JOptionPane.showMessageDialog(null, "Please Enter A Valid Pin With 4 Digit!");
-							}
-							else if(msg == "4")
-							{
-								JOptionPane.showMessageDialog(null, "Please Enter A Valid Email Address!");
+								JOptionPane.showMessageDialog(null, warnning.toString(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
+								
+								
 							}
 							else
 							{
@@ -166,11 +167,14 @@ public class AddCustomerGUI extends JDialog {
 									if (  Customer.add(aCustomer)  > 0 )
 									 {
 										
-										   JOptionPane.showMessageDialog(null, " new customer added with success");
+										   JOptionPane.showMessageDialog(null, " The New Customer Added Successfully" , "Success Operation",JOptionPane.INFORMATION_MESSAGE);
+										   setVisible(false);
+										   BankGUIAppDB.loadTable();
+										   BankGUIAppDB.setDateTime();
 									 }
 									else
 									 {
-										JOptionPane.showMessageDialog(null, " new customer NOT added with success");
+										JOptionPane.showMessageDialog(null, " Something Went Wrong! Try Again.", "Incomplete operation", JOptionPane.ERROR_MESSAGE);
 									   	  
 									}
 								} catch (HeadlessException e1) {
@@ -181,10 +185,7 @@ public class AddCustomerGUI extends JDialog {
 									e1.printStackTrace();
 								}
 							}
-						}
-						
-						
-						
+						}	
 					}
 				});
 				okButton.setActionCommand("OK");
