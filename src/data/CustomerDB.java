@@ -21,9 +21,7 @@ public class CustomerDB {
 		
 		currentStatement = currentConnection.createStatement() ;
 		
-		request = "insert into customers  values (' "
-				+ record.getAccountNum() + "', '" + record.getCustomerName() 
-				+ "' , '" + record.getCustomerPIN() + "' , '" + record.getCustomerEmail() + "')";
+		request = "insert into customers  values (' "+ record.getAccountNum() + "', '" + record.getCustomerName() + "' , '" + record.getCustomerPIN() + "' , '" + record.getCustomerEmail() + "')";
 		
         success = currentStatement.executeUpdate(request);		
 		
@@ -64,6 +62,28 @@ public class CustomerDB {
 		currentStatement = currentConnection.createStatement() ;
 		
 		request = "delete from customers where NUM =" + id;
+		
+        success = currentStatement.executeUpdate(request);		
+		
+		
+		return success;
+		
+	}
+	
+	public static int update(String id, String Name, String Pin, String Mail) throws SQLException
+	{
+		int success = -1;
+		
+		Connection currentConnection = null; 
+		Statement currentStatement = null; 
+		String request;
+		
+		currentConnection = ConnectionDB.getConnection();
+		
+		currentStatement = currentConnection.createStatement() ;
+		
+		request = "UPDATE customers SET NAME ='" + Name + "', PIN='" + Pin + "', EMAIL='" + Mail+ "' WHERE NUM =" + id;			
+				
 		
         success = currentStatement.executeUpdate(request);		
 		

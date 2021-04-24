@@ -6,7 +6,7 @@ public class ValidatorGUI {
  
 	public static boolean ValiCustomerNumber(String customernum) {
 		
-		String addressPattern = "[0-9]{7}|[!]{1}";
+		String addressPattern = "[0-9]{5}";
 		boolean b3 = Pattern.matches(addressPattern, customernum); 
 		
 		if(b3 == true){return true;}
@@ -40,7 +40,14 @@ public class ValidatorGUI {
 		return false;
 	}
 	
-
+	public static boolean ValiCustomerUpdateNumber(String customernum) {
+		
+		String addressPattern = "[0-9]{5}";
+		boolean b3 = Pattern.matches(addressPattern, customernum); 
+		
+		if(b3 == true){return true;}
+		return false;
+	}
 
 
 }

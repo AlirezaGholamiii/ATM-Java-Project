@@ -1,4 +1,4 @@
-package client;
+package GUI;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -61,6 +61,7 @@ public class BankGUIAppDB {
 		try
 		{
 		    tableCustomers.setModel(DbUtils.resultSetToTableModel(CustomerDB.display()));
+		    
 		}
 		catch(Exception e)
 		{
@@ -85,7 +86,7 @@ public class BankGUIAppDB {
 	 */
 	private void initialize() {
 		frmBankApplication = new JFrame();
-		frmBankApplication.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\kasra\\eclipse-workspace\\W2021\\BankFortisApplication\\icon\\business-and-finance-glyph-13-512.png"));
+		frmBankApplication.setIconImage(Toolkit.getDefaultToolkit().getImage("..\\BankFortisApplication\\icon\\business-and-finance-glyph-13-512.png"));
 		frmBankApplication.setResizable(false);
 		frmBankApplication.setTitle("Bank Application");
 		frmBankApplication.getContentPane().setBackground(Color.LIGHT_GRAY);
@@ -121,6 +122,12 @@ public class BankGUIAppDB {
 		panel.add(btnRemove);
 		
 		JButton btnUpdateCustomer = new JButton("Update Customer");
+		btnUpdateCustomer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UptadeCustomerGUI dialog = new UptadeCustomerGUI();
+				dialog.setVisible(true);
+			}
+		});
 		btnUpdateCustomer.setFont(new Font("Sitka Text", Font.PLAIN, 13));
 		btnUpdateCustomer.setBounds(358, 372, 147, 28);
 		panel.add(btnUpdateCustomer);

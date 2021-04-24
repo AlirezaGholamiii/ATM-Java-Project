@@ -81,5 +81,8 @@ public class Customer extends Account {
 	{
 		return CustomerDB.remove(customerID);			
 	}
-
+	public static int Update(String ID, String name, String Pin, String Email) throws SQLException
+	{
+		return CustomerDB.update(ID,name,Pin,Email);			
+	}
 }

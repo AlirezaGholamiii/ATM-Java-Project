@@ -1,10 +1,7 @@
 package data;
 import bus.Account;
 import bus.CheckingAcc;
-
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import bus.Customer;
 public class DataCollection {

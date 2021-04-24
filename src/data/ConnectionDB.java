@@ -12,8 +12,8 @@ public class ConnectionDB {
 		String user, pwd, service, url = null ; 		
 		Connection currentConnection = null ;
 		
-		user = "demo";
-		pwd = "demo";
+		user = "bank";
+		pwd = "bank";
 		service = "localhost";
 		url = "jdbc:oracle:thin:";		
 		url +=user + "/" + pwd + "@" + service;

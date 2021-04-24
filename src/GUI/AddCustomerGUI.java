@@ -1,4 +1,4 @@
-package client;
+package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -7,23 +7,11 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.GridLayout;
 import java.awt.HeadlessException;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import java.awt.CardLayout;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.FormSpecs;
-import com.jgoodies.forms.layout.RowSpec;
-
 import bus.Customer;
 import bus.ValidatorGUI;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -57,7 +45,7 @@ public class AddCustomerGUI extends JDialog {
 	 * Create the dialog.
 	 */
 	public AddCustomerGUI() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\kasra\\eclipse-workspace\\W2021\\BankFortisApplication\\icon\\business-and-finance-glyph-13-512.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("..\\BankFortisApplication\\icon\\business-and-finance-glyph-13-512.png"));
 		setResizable(false);
 		setTitle("Add New Customer");
 		setBounds(100, 100, 441, 259);
@@ -141,13 +129,13 @@ public class AddCustomerGUI extends JDialog {
 							StringBuilder warnning = new StringBuilder();
 							
 							if(ValidatorGUI.ValiCustomerNumber(num)== false)
-							{warnning.append("Please Enter A Valid Number With 7 Digit!\n");}
+							{warnning.append("Please Enter A Valid Number With 5 Digits!\n");}
 							
 							if(ValidatorGUI.ValiCustomerName(name)== false)
-							{warnning.append("Please Enter A Valid Name With 2 to 10 Character!\n");}
+							{warnning.append("Please Enter A Valid Name With 2 to 10 Characters!\n");}
 							
 							if(ValidatorGUI.ValiCustomerPin(pin)== false)
-							{warnning.append("Please Enter A Valid Pin With 4 Digit!\n");}
+							{warnning.append("Please Enter A Valid Pin With 4 Digits!\n");}
 							
 							if(ValidatorGUI.ValiCustomerEmail(email)== false)
 							{warnning.append("Please Enter A Valid Email Address!\n");}
@@ -178,10 +166,8 @@ public class AddCustomerGUI extends JDialog {
 									   	  
 									}
 								} catch (HeadlessException e1) {
-									// TODO Auto-generated catch block
 									e1.printStackTrace();
 								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
 									e1.printStackTrace();
 								}
 							}

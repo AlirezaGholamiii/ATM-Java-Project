@@ -1,4 +1,4 @@
-package client;
+package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import bus.Customer;
+import bus.ValidatorGUI;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -46,7 +47,7 @@ public class DeleteCustomerGUI extends JDialog {
 	 * Create the dialog.
 	 */
 	public DeleteCustomerGUI() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\kasra\\eclipse-workspace\\W2021\\BankFortisApplication\\icon\\business-and-finance-glyph-13-512.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("..\\BankFortisApplication\\icon\\business-and-finance-glyph-13-512.png"));
 		setResizable(false);
 		setTitle("Delete Customer");
 		setBounds(100, 100, 362, 175);
@@ -80,7 +81,11 @@ public class DeleteCustomerGUI extends JDialog {
 					
 						if(customerNum.isEmpty() )
 						{
-							JOptionPane.showMessageDialog(null, "Please Enter A Valid Customer Number!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Please Enter A Valid Customer Number!", "Empty Input", JOptionPane.ERROR_MESSAGE);
+						}
+						else if(ValidatorGUI.ValiCustomerNumber(customerNum) == false)
+						{
+							JOptionPane.showMessageDialog(null, "Please Enter A Valid Customer Number With 5 Digits!\nEx. 55673", "Invalid Input", JOptionPane.ERROR_MESSAGE);
 						}
 						else
 						{
