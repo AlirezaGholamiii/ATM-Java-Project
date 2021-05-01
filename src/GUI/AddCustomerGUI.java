@@ -12,6 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import bus.Customer;
 import bus.ValidatorGUI;
+import data.CustomerDB;
+import net.proteanit.sql.DbUtils;
+
 import javax.swing.JTextField;
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -152,19 +155,24 @@ public class AddCustomerGUI extends JDialog {
 								Customer aCustomer = new Customer(num, name, pin,email);
 								
 						        try {
-									if (  Customer.add(aCustomer)  > 0 )
-									 {
-										
-										   JOptionPane.showMessageDialog(null, " The New Customer Added Successfully" , "Success Operation",JOptionPane.INFORMATION_MESSAGE);
-										   setVisible(false);
-										   BankGUIAppDB.loadTable();
-										   BankGUIAppDB.setDateTime();
-									 }
-									else
-									 {
-										JOptionPane.showMessageDialog(null, " Something Went Wrong! Try Again.", "Incomplete operation", JOptionPane.ERROR_MESSAGE);
-									   	  
-									}
+						        	
+						        		if(!Customer.Search(num).next() == false)///search for customer if exist)
+						        		{
+						        			JOptionPane.showMessageDialog(null, "This customer number exists! Please enter a new number." , "Incomplete Operation",JOptionPane.ERROR_MESSAGE);
+						        		}
+						        		else if (Customer.add(aCustomer)  > 0 )
+										{
+												
+											JOptionPane.showMessageDialog(null, " The New Customer Added Successfully" , "Success Operation",JOptionPane.INFORMATION_MESSAGE);
+											setVisible(false);
+											BankGUIAppDB.loadTable();
+											BankGUIAppDB.setDateTime();
+										 }
+										 else
+										 {
+											JOptionPane.showMessageDialog(null, " Something Went Wrong! Try Again.", "Incomplete operation", JOptionPane.ERROR_MESSAGE);
+											   	  
+										 }
 								} catch (HeadlessException e1) {
 									e1.printStackTrace();
 								} catch (SQLException e1) {

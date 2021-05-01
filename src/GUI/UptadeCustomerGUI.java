@@ -164,6 +164,7 @@ public class UptadeCustomerGUI extends JDialog {
 								
 								
 						        try {
+						        	
 									if (  Customer.Update(num, name, pin, email)  > 0 )
 									 {
 										

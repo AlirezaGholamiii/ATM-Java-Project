@@ -1,6 +1,5 @@
 package data;
 import bus.Account;
-import bus.CheckingAcc;
 import java.io.IOException;
 import java.util.ArrayList;
 import bus.Customer;
@@ -8,7 +7,6 @@ public class DataCollection {
 	
 	//private static data
 	 private static  ArrayList<Account>  filelistOfAccount = new  ArrayList<Account>();
-	 private static  ArrayList<CheckingAcc>  filelistOfCheckingAcc = new  ArrayList<CheckingAcc>();
 	 
 	 
 	 
@@ -20,13 +18,6 @@ public class DataCollection {
     	 FileHandeler.writeToFileAccount(filelistOfAccount);
 	 }	 
      
- 	//Add an checking account	 
-     public static void addCheckingAcc(CheckingAcc object) throws IOException, ClassNotFoundException
-	 {
-    	 filelistOfCheckingAcc.add(object);
-    	 FileHandeler.writeToFileCheckingAcc(filelistOfCheckingAcc);
-	 }
-	 
      //Remove an account
   
 	public static void removeAccount(String key)throws ClassNotFoundException, IOException
@@ -70,12 +61,6 @@ public class DataCollection {
 					  System.out.println(element); 
 				 }
 				 
-				 filelistOfCheckingAcc = FileHandeler.readFromFileCheckingAcc();
-				 
-				 for(CheckingAcc element : filelistOfCheckingAcc)
-				 {
-					  System.out.println(element); 
-				 }
 		 }
 		 catch(IOException e)
 		 {
@@ -202,8 +187,7 @@ public class DataCollection {
 				  
 				 if(((Customer) element).getCustomerNum().equals(key))
 				 {
-					 
-					 
+
 					 // remove customer.
 					 filelistOfCustomer.remove(element);
 					 System.out.println("Customer Number " + key + " removed!");

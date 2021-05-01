@@ -21,7 +21,7 @@ public class CustomerDB {
 		
 		currentStatement = currentConnection.createStatement() ;
 		
-		request = "insert into customers  values (' "+ record.getAccountNum() + "', '" + record.getCustomerName() + "' , '" + record.getCustomerPIN() + "' , '" + record.getCustomerEmail() + "')";
+		request = "insert into customers  values (' "+ record.getCustomerNum() + "', '" + record.getCustomerName() + "' , '" + record.getCustomerPIN() + "' , '" + record.getCustomerEmail() + "')";
 		
         success = currentStatement.executeUpdate(request);		
 		
@@ -89,6 +89,26 @@ public class CustomerDB {
 		
 		
 		return success;
+		
+	}
+	
+	public static ResultSet search(String id) throws SQLException
+	{
+		
+		
+		Connection currentConnection = null; 
+		String request;
+		
+		currentConnection = ConnectionDB.getConnection();
+		
+		request = "select * from customers where NUM =" + id;
+		
+		PreparedStatement pst = currentConnection.prepareStatement(request);
+		
+		ResultSet rs = pst.executeQuery();
+		
+		
+		return rs;
 		
 	}
 }

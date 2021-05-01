@@ -1,12 +1,13 @@
 package bus;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import bus.Account;
 import data.CustomerDB;
 
 
-public class Customer extends Account {
+public class Customer implements Serializable{
 	
 
 	/**
@@ -48,7 +49,6 @@ public class Customer extends Account {
 	//Constructors
 	
 	public Customer() {
-		super();
 		this.customerNum = "Undefined";
 		this.customerName = "Undefined";
 		this.customerPIN = "Undefined";
@@ -56,7 +56,6 @@ public class Customer extends Account {
 	}
 	
 	public Customer(String customerNum, String customerName, String customerPIN, String customerEmail) {
-		super(customerNum, EnumAccount.Checking , 0.0);
 		this.customerNum = customerNum;
 		this.customerName = customerName;
 		this.customerPIN = customerPIN;
@@ -65,6 +64,7 @@ public class Customer extends Account {
 	}
 	
 	
+
 	//ToString
 	@Override
 	public String toString() {
@@ -85,4 +85,9 @@ public class Customer extends Account {
 	{
 		return CustomerDB.update(ID,name,Pin,Email);			
 	}
+	public static ResultSet Search(String customerID) throws SQLException
+	{
+		return CustomerDB.search(customerID);			
+	}
+
 }

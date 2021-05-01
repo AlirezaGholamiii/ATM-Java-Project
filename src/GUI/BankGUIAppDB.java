@@ -186,6 +186,17 @@ public class BankGUIAppDB {
 		lblTime_1.setFont(new Font("Times New Roman", Font.BOLD, 16));
 		lblTime_1.setBounds(309, 56, 343, 36);
 		panel.add(lblTime_1);
+		
+		JButton btnSearch = new JButton("Search Customer");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SearchCustomerGUI dialog = new SearchCustomerGUI();
+				dialog.setVisible(true);
+			}
+		});
+		btnSearch.setFont(new Font("Sitka Text", Font.PLAIN, 13));
+		btnSearch.setBounds(261, 410, 147, 28);
+		panel.add(btnSearch);
 		frmBankApplication.setBackground(Color.GRAY);
 		frmBankApplication.setBounds(100, 100, 708, 534);
 		frmBankApplication.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

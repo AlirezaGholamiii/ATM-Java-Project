@@ -93,7 +93,7 @@ public class main {
 								//A customer must have at least a checking account.
 								//Create new accout type checking
 								Account defaultAccount = null;
-								defaultAccount = new Account(newCustomer.getOwnerID(), newCustomer.getAccountType(), newCustomer.getAccountBalance());
+								defaultAccount = new Account(newCustomer.getCustomerNum(), EnumAccount.Checking, 0.0);
 								
 								//Save new customer and new account to data collection
 								DataCollection.addCustomer(newCustomer);
@@ -110,7 +110,7 @@ public class main {
 						
 						//Create new accout type checking
 						Account defaultAccount = null;
-						defaultAccount = new Account(newCustomer.getOwnerID(), newCustomer.getAccountType(), newCustomer.getAccountBalance());
+						defaultAccount = new Account(newCustomer.getCustomerNum(), EnumAccount.Checking, 0.0);
 						
 						//Save new customer and new account to data collection
 						DataCollection.addCustomer(newCustomer);
@@ -196,23 +196,11 @@ public class main {
 						   
 						} while(Validator.ValiAccountBalance(balance) == false);
 						
-						if(swichInput == "1")
-						{
-							//Create an account with all validated information and save to file
-							CheckingAcc newCheckingAccount = null;
-							newCheckingAccount = new CheckingAcc(customerNum, accountType, Double.valueOf(balance));
-							  DataCollection.addCheckingAcc(newCheckingAccount);
-						}
-						else
-						{
-							//Create an account with all validated information and save to file
-							  Account newAccount = null;
-							  newAccount = new Account(customerNum, accountType, Double.valueOf(balance));
-							  DataCollection.addAccount(newAccount);
-						}
-						  
-						
-						
+						//Create an account with all validated information and save to file
+						Account newAccount = null;
+						newAccount = new Account(customerNum, accountType, Double.valueOf(balance));
+						DataCollection.addAccount(newAccount);
+	
 					}
 					else
 					{
@@ -233,7 +221,15 @@ public class main {
 					}while(Validator.ValiAccountNumber(accountNum) == false);
 					
 					//Search and if exist then remove it
-					DataCollection.removeAccount(accountNum);
+					if(DataCollection.searchAccount(accountNum) == null)
+					{
+						System.out.println("This Account does not exist!");
+					}
+					else
+					{
+						DataCollection.removeAccount(accountNum);
+					}
+					
 					break;
 				}
 				case "6": {
