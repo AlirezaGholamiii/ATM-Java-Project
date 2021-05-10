@@ -111,4 +111,34 @@ public class CustomerDB {
 		return rs;
 		
 	}
+	
+	public static Customer SearchGetter(String id) throws SQLException
+	{
+		
+		Customer cus = new Customer();
+		Connection currentConnection = null; 
+		Statement currentStatement = null; 
+		String request;
+		
+		currentConnection = ConnectionDB.getConnection();
+		
+		currentStatement = currentConnection.createStatement() ;
+		
+		request = "select * from customers where NUM =" + id;	
+		
+	      ResultSet rs = currentStatement.executeQuery(request);
+	      while (rs.next()) {
+	        String num = rs.getString("NUM");
+	        String name = rs.getString("NAME");
+	        String pin = rs.getString("PIN");
+	        String email = rs.getString("EMAIL");
+	        
+	        cus= new Customer(num,name,pin,email);
+	        
+	      }
+	      
+	      
+		return cus;
+		
+	}
 }

@@ -21,6 +21,8 @@ import com.jgoodies.forms.layout.RowSpec;
 
 import bus.Customer;
 import bus.ValidatorGUI;
+import data.CustomerDB;
+import net.proteanit.sql.DbUtils;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -38,6 +40,10 @@ public class UptadeCustomerGUI extends JDialog {
 	private JTextField txtName;
 	private JTextField txtPin;
 	private JTextField txtEmail;
+	public static String number;
+	JButton btnUpdate = new JButton("Update");
+	JButton okButton = new JButton("Search");
+	JButton btnReset = new JButton("Reset");
 
 	/**
 	 * Launch the application.
@@ -56,6 +62,8 @@ public class UptadeCustomerGUI extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
+
+
 	public UptadeCustomerGUI() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage("..\\BankFortisApplication\\icon\\business-and-finance-glyph-13-512.png"));
 		setResizable(false);
@@ -92,7 +100,7 @@ public class UptadeCustomerGUI extends JDialog {
 		
 		txtNum = new JTextField();
 		txtNum.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		txtNum.setBounds(164, 26, 206, 28);
+		txtNum.setBounds(164, 26, 123, 28);
 		contentPanel.add(txtNum);
 		txtNum.setColumns(10);
 		{
@@ -121,80 +129,6 @@ public class UptadeCustomerGUI extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						
-						String num, name, pin, email;
-						
-						num = txtNum.getText();
-						name = txtName.getText().trim();
-						pin = txtPin.getText().trim();
-						email = txtEmail.getText().trim();
-						
-						if(num.isEmpty() || name.isEmpty() || pin.isEmpty() || email.isEmpty())
-						{
-							JOptionPane.showMessageDialog(null, "Please Enter A Valid Input For Each Feild!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-						}
-						else
-						{
-							StringBuilder warnning = new StringBuilder();
-							
-							if(ValidatorGUI.ValiCustomerUpdateNumber(num) == false)
-							{warnning.append("Please Enter A Valid Customer Number With 5 Digits!\n");}
-							
-							if(ValidatorGUI.ValiCustomerName(name)== false)
-							{warnning.append("Please Enter A Valid Name With 2 to 10 Characters!\n");}
-							
-							if(ValidatorGUI.ValiCustomerPin(pin)== false)
-							{warnning.append("Please Enter A Valid Pin With 4 Digits!\n");}
-							
-							if(ValidatorGUI.ValiCustomerEmail(email)== false)
-							{warnning.append("Please Enter A Valid Email Address!\n");}
-							
-						
-							if(warnning.length() > 0)
-							{
-								JOptionPane.showMessageDialog(null, warnning.toString(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
-								
-								
-							}
-							else
-							{
-								
-								
-						        try {
-						        	
-									if (  Customer.Update(num, name, pin, email)  > 0 )
-									 {
-										
-										   JOptionPane.showMessageDialog(null, " The Information Updated Successfully" , "Success Operation",JOptionPane.INFORMATION_MESSAGE);
-										   setVisible(false);
-										   BankGUIAppDB.loadTable();
-										   BankGUIAppDB.setDateTime();
-									 }
-									else
-									 {
-										JOptionPane.showMessageDialog(null, "This Customer Number Does Not Exist! Try Again.", "Incomplete operation", JOptionPane.ERROR_MESSAGE);
-										txtNum.setText("");
-										txtNum.requestFocus();
-									}
-								} catch (HeadlessException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								} catch (SQLException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}
-						}	
-					}
-				});
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -202,22 +136,199 @@ public class UptadeCustomerGUI extends JDialog {
 					}
 				});
 				{
-					JButton btnReset = new JButton("Reset");
+					
 					btnReset.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							
 							
 							
-							txtNum.setText(null);
+							
 							txtName.setText(null);
 							txtPin.setText(null);
 							txtEmail.setText(null);
 
-							txtNum.requestFocus();
+							txtName.requestFocus();
 						}
 					});
+					{
+						
+						btnUpdate.setEnabled(false);
+						btnReset.setEnabled(false);
+						btnUpdate.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								
+								String num, name, pin, email;
+								
+								
+								
+								num = txtNum.getText().trim();
+								name = txtName.getText().trim();
+								pin = txtPin.getText().trim();
+								email = txtEmail.getText().trim();
+								
+								if(name.isEmpty() || pin.isEmpty() || email.isEmpty())
+								{
+									JOptionPane.showMessageDialog(null, "Please Enter A Valid Input For Each Feild!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+								}
+								else
+								{
+									StringBuilder warnning = new StringBuilder();
+									
+									
+									if(ValidatorGUI.ValiCustomerName(name)== false)
+									{warnning.append("Please Enter A Valid Name With 2 to 10 Characters!\n");}
+									
+									if(ValidatorGUI.ValiCustomerPin(pin)== false)
+									{warnning.append("Please Enter A Valid Pin With 4 Digits!\n");}
+									
+									if(ValidatorGUI.ValiCustomerEmail(email)== false)
+									{warnning.append("Please Enter A Valid Email Address!\n");}
+									
+								
+									if(warnning.length() > 0)
+									{
+										JOptionPane.showMessageDialog(null, warnning.toString(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
+										
+										
+									}
+									else
+									{
+										
+										
+								        try {
+								        	
+											if (  Customer.Update(num, name, pin, email)  > 0 )
+											 {
+												
+												   JOptionPane.showMessageDialog(null, " The Information Updated Successfully" , "Success Operation",JOptionPane.INFORMATION_MESSAGE);
+												   setVisible(false);
+												   BankGUIAppDB.loadTable();
+												   BankGUIAppDB.setDateTime();
+											 }
+											else
+											 {
+												JOptionPane.showMessageDialog(null, "This Customer Number Does Not Exist! Try Again.", "Incomplete operation", JOptionPane.ERROR_MESSAGE);
+												txtNum.setText("");
+												txtNum.requestFocus();
+											}
+										} catch (HeadlessException e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										} catch (SQLException e1) {
+											// TODO Auto-generated catch block
+											e1.printStackTrace();
+										}
+									}
+								}
+							}
+						});
+						btnUpdate.setActionCommand("OK");
+						buttonPane.add(btnUpdate);
+					}
 					buttonPane.add(btnReset);
 				}
+				   txtName.setEnabled(false);
+				   txtPin.setEnabled(false);
+				   txtEmail.setEnabled(false);
+				   {
+				   	okButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
+				   	okButton.setBounds(297, 26, 73, 28);
+				   	contentPanel.add(okButton);
+				   	
+				   	okButton.addActionListener(new ActionListener() {
+				   		public void actionPerformed(ActionEvent e) {
+
+				   			String num;
+				   			num = txtNum.getText();
+				   		
+				   			
+				   			if(num.isEmpty())
+				   			{
+				   				JOptionPane.showMessageDialog(null, "Please Enter A Valid Customer Number!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+				   			}
+				   			else
+				   			{
+				   				StringBuilder warnning = new StringBuilder();
+				   				
+				   				if(ValidatorGUI.ValiCustomerUpdateNumber(num) == false)
+				   				{warnning.append("Please Enter A Valid Customer Number With 5 Digits!\n");}
+				   				
+				   			
+				   				if(warnning.length() > 0)
+				   				{
+				   					JOptionPane.showMessageDialog(null, warnning.toString(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
+				   					
+				   					
+				   				}
+				   				else
+				   				{
+				   			        try {
+				   						if (! Customer.Search(num).next() == false)
+				   						 {
+				   							
+				   						
+				   							   JOptionPane.showMessageDialog(null, " The Customer Successfully Found." , "successful Operation",JOptionPane.INFORMATION_MESSAGE);
+				   							   
+				   							 
+				   							   try
+				   								{
+				   								 
+				   								   txtName.setEnabled(true);
+				   								   txtPin.setEnabled(true);
+				   								   txtEmail.setEnabled(true);
+				   								   btnUpdate.setEnabled(true);
+				   								   btnReset.setEnabled(true);
+				   								   okButton.setEnabled(false);
+				   								   txtNum.setEditable(false);
+				   								
+				   										 
+				   										   try
+				   											{
+				   											Customer cus = new Customer();
+				   											cus = CustomerDB.SearchGetter(txtNum.getText());
+				   											
+				   											txtPin.setEnabled(true);
+				   											txtEmail.setEnabled(true);
+				   											txtName.setText(cus.getCustomerName());
+							   								txtPin.setText(cus.getCustomerPIN());
+							   								txtEmail.setText(cus.getCustomerEmail());
+  
+				   											}
+				   											catch(Exception e1)
+				   											{
+				   												e1.printStackTrace();
+				   												
+				   											}
+  
+				   								}
+				   								catch(Exception e1)
+				   								{
+				   									e1.printStackTrace();
+				   									
+				   								}
+				   							   
+				   						 }
+				   						else
+				   						 {
+				   							JOptionPane.showMessageDialog(null, " This Customer Does Not Exist! Try Again.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+				   							txtNum.setText("");
+				   							txtNum.requestFocus();
+				   						}
+				   					} catch (HeadlessException e1) {
+				   						// TODO Auto-generated catch block
+				   						e1.printStackTrace();
+				   					} catch (SQLException e1) {
+				   						// TODO Auto-generated catch block
+				   						e1.printStackTrace();
+				   					}
+				   					
+				   				}
+				   			}
+				   		}
+				   	});
+				   	okButton.setActionCommand("OK");
+				   	getRootPane().setDefaultButton(okButton);
+				   }
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}

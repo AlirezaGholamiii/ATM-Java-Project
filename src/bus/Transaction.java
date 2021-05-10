@@ -1,7 +1,9 @@
 package bus;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Transaction extends Account {
+
+public class Transaction implements Serializable{
 	
 	/**
 	 * 
