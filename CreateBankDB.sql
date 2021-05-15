@@ -10,6 +10,11 @@ PIN varchar(4),
 EMAIL varchar(100),
 constraint Customer_PK primary key(NUM));
 desc customers;
+INSERT INTO customers VALUES (12345, 'Alireza', 1236,'kasragholami47@yahoo.com');
+INSERT INTO customers VALUES (12346, 'Zahara', 8954,'zahra.soltani@gamil.com');
+INSERT INTO customers VALUES (12347, 'Emie', 4521,'Emmmie@gmail.com');
+INSERT INTO customers VALUES (12348, 'valery', 8723,'valery.cohan@yahoo.com');
+commit;
 column NUM format a10;
 column NAME format a20;
 column PIN format a4;

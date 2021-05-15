@@ -135,9 +135,20 @@ public class main {
 						
 					}while(Validator.ValiCustomerNumber(customerNum) == false);
 					
-					//Check if customer exist then remove it from data collection
-					DataCollection.removeCustomer(customerNum);
-					System.out.println("\n\n\n\n\n\n");
+					//check the number in data collection if exist then run the request
+					if(DataCollection.searchCustomers(customerNum) != null)
+					{
+						//Check if customer exist then remove it from data collection
+						if(DataCollection.removeCustomer(customerNum) == true)
+						{
+							System.out.println("Customer Number " + customerNum + " removed!");
+						}
+					}
+					else
+					{
+						System.out.println("This customer does not exist!");
+					}
+					System.out.println("\n\n");
 					break;
 				}
 				case "3": {
@@ -227,7 +238,20 @@ public class main {
 					}
 					else
 					{
-						DataCollection.removeAccount(accountNum);
+				    	 try {
+								if(DataCollection.removeAccount(accountNum) == true)
+								{
+									
+									System.out.println("Account with the Number of " + accountNum + " removed!");
+								}
+				 	 
+				    	 }
+				    	 catch(IOException e)
+				    	 {
+				    		 System.out.println("File not found! :(\n\n");
+				    	
+				    	 }
+
 					}
 					
 					break;
@@ -236,8 +260,10 @@ public class main {
 					System.out.print("\t((ALL THE ACCOUNTS))\n\n");
 					
 					//Provide all data from serializable file
-					DataCollection.allAccounts();
-					System.out.println("\n\n");
+							  DataCollection.allAccounts(); 
+							  System.out.println("\n\n");
+
+				
 					break;
 				}
 				case "7": {
@@ -293,11 +319,21 @@ public class main {
 								}while(Validator.ValiAccountWithdraw(withdrawAmount) == false);
 								
 								//save withdraw to file
-									DataCollection.withdrawAccount(accountNum, Double.valueOf(withdrawAmount));
+									if(DataCollection.withdrawAccount(accountNum, Double.valueOf(withdrawAmount)) == true)
+									{
+										System.out.println(withdrawAmount + "$ was withdrawn.");
+									}
+									else
+									{
+										System.out.println("Not enought money !");
+									}
 								break;
 							case "3":
 									//Read data from the file
-									DataCollection.searchAccountInfo(accountNum);
+									if(DataCollection.searchAccountInfo(accountNum) != null)
+									{
+										System.out.println(DataCollection.searchAccountInfo(accountNum));
+									}
 								break;
 							default:
 								System.out.println("Your option is not valid.");
@@ -327,6 +363,19 @@ public class main {
 		
 		
 		scanner.close();
+	}
+	
+	public static void error()
+	{
+		System.out.println("File Not Found! :(\n\n");
+	}
+	public static void showAccount(Account element)
+	{
+		System.out.println(element);
+	}
+	public static void showCustomer(Customer element)
+	{
+		System.out.println(element);
 	}
 
 }

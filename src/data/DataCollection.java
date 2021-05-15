@@ -3,6 +3,7 @@ import bus.Account;
 import java.io.IOException;
 import java.util.ArrayList;
 import bus.Customer;
+import client.main;
 public class DataCollection {
 	
 	//private static data
@@ -20,12 +21,11 @@ public class DataCollection {
      
      //Remove an account
   
-	public static void removeAccount(String key)throws ClassNotFoundException, IOException
+	public static boolean removeAccount(String key)throws ClassNotFoundException, IOException
 	 {
 		
     	 Account accountForRemove = new Account();
-    	 try {
-	 	
+    	 
 	    	 for( Account element : filelistOfAccount)
 			 {
 	    		
@@ -33,40 +33,36 @@ public class DataCollection {
 				 {
 					 accountForRemove = element;
 					 filelistOfAccount.remove(accountForRemove);
-					 System.out.println("Account with the Number of " + key + " removed!");
+					 FileHandeler.writeToFileAccount(filelistOfAccount);
+					 return true;
 					
 				 }
 
 			 }
-	    	 
-	    	 FileHandeler.writeToFileAccount(filelistOfAccount);	 
-    	 }
-    	 catch(IOException e)
-    	 {
-    		 System.out.println("File not found! :(\n\n");
-    	
-    	 }
+ 	 
+
     	 FileHandeler.writeToFileAccount(filelistOfAccount);
+    	 return false;
 		
 	 }	 
 	
      //dsiplay all accounts
 	 public static void allAccounts()throws ClassNotFoundException 	 
 	 {
+		
 		 try { 
-				 filelistOfAccount = FileHandeler.readFromFileAccount();
-				 
-				 for(Account element : filelistOfAccount)
-				 {
-					  System.out.println(element); 
-				 }
-				 
-		 }
-		 catch(IOException e)
-		 {
-			System.out.println("File not found! :(\n\n");
-		 }
-		 
+			 filelistOfAccount = FileHandeler.readFromFileAccount();
+			 
+			 for(Account element : filelistOfAccount)
+			 {
+				  main.showAccount(element);
+			 }
+			 
+	 }
+	 catch(IOException e)
+	 {
+		main.error();
+	 }		 
 		
 	 } 	 
 	  	 
@@ -89,7 +85,7 @@ public class DataCollection {
 		 }
 		 catch(IOException e)
 		 {
-			 System.out.println("File not found! :(");
+			 main.error();
 			 return null;
 		 }
 	 }
@@ -121,7 +117,7 @@ public class DataCollection {
 	 }	 
 	 
 	 //search for an Account and withdraw money	 
-	 public static void withdrawAccount(String key,double amount)throws IOException, ClassNotFoundException
+	 public static boolean withdrawAccount(String key,double amount)throws IOException, ClassNotFoundException
 	 {
 		 filelistOfAccount = FileHandeler.readFromFileAccount();
 		 
@@ -130,21 +126,21 @@ public class DataCollection {
 				    	 
 				 if(((Account) element).getAccountNum().equals(key))
 				 {
-					 if(amount >= element.getAccountBalance()) {
-							
-							System.out.println("Not enought money !");;
+					 if(amount >= element.getAccountBalance()) 
+					 {
+							return false;
 					 }
 					 else
 					 {
 						 element.withdrawl(amount);	
 						 FileHandeler.writeToFileAccount(filelistOfAccount);
-						 System.out.println(amount + "$ was withdrawn.");
+						 return true;
 					 }	
 						 
 						 
 				 }
 			 }
-			 
+			 return false; 
 	 }
 	 
 	 //search for an Account and show details	 
@@ -158,7 +154,7 @@ public class DataCollection {
 				 if(((Account) element).getAccountNum().equals(key))
 				 {
 					 
-					 System.out.println(element); 			 
+					 return element; 			 
 				 }
 			 }		 
 	   return null;	   
@@ -177,7 +173,7 @@ public class DataCollection {
 	 }	 
 	 
      //Remove a customer
-     public static void removeCustomer(String key)throws ClassNotFoundException
+     public static boolean removeCustomer(String key)throws ClassNotFoundException
 	 {
     	 try {
 	    	 filelistOfCustomer = FileHandeler.readFromFileCustomer();
@@ -190,16 +186,18 @@ public class DataCollection {
 
 					 // remove customer.
 					 filelistOfCustomer.remove(element);
-					 System.out.println("Customer Number " + key + " removed!");
+		    		 //save to file
+		    		 FileHandeler.writeToFileCustomer(filelistOfCustomer);
+					 return true;
 				 } 
 			 }
-    		 //save to file
-    		 FileHandeler.writeToFileCustomer(filelistOfCustomer);
+
      	 }
     	 catch(IOException e)
     	 {
-    		 System.out.println("File not found! :(\n\n");
+    		 main.error();
     	 }
+    	 return false;
 	 }	 
 	
      //dsiplay all customers
@@ -209,13 +207,13 @@ public class DataCollection {
 				 filelistOfCustomer = FileHandeler.readFromFileCustomer();
 				 for(Customer element : filelistOfCustomer)
 				 {
-					 System.out.println(element);
+					 main.showCustomer(element);
 					 
 				 }
 		 }
 		 catch(IOException e)
 		 {
-			 System.out.println("File not found! :(\n\n");
+			 main.error();
 		 }
 		 
 		
@@ -240,7 +238,7 @@ public class DataCollection {
 		 }
 		 catch(IOException e)
 		 {
-			 System.out.println("File not found! :(\n\n");
+			 main.error();
 			 return null;
 		 }
 	 }

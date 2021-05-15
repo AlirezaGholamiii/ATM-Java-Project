@@ -8,6 +8,7 @@ import data.ConnectionDB;
 
 public class DBConsoleAppBank {
 
+	//Test console class connected to bank database
 	public static void main(String[] args) throws SQLException {
 		
 		Scanner keyboard = new Scanner(System.in);		
