@@ -8,7 +8,7 @@ Also, dont forget to create the database : CreateBankDB.sql
 
 ===================== last version changes ================
 
-Alireza/Zahra/Emie
+Alireza
 1-DataCollection has no system.out.println() any more.
 2-Api (doc file) updated.
 3-Only SavingAcc and CheckingAcc are extended as a Account.
